@@ -1,0 +1,54 @@
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="moc_shadow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#2A1810" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#2A1810" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="moc_mug_body" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4A2E20"/>
+      <stop offset="20%" stop-color="#6B4226"/>
+      <stop offset="50%" stop-color="#7A4E30"/>
+      <stop offset="80%" stop-color="#5C3A2E"/>
+      <stop offset="100%" stop-color="#3B2419"/>
+    </linearGradient>
+    <linearGradient id="moc_handle" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7A4E30"/>
+      <stop offset="50%" stop-color="#5C3A2E"/>
+      <stop offset="100%" stop-color="#3B2419"/>
+    </linearGradient>
+    <radialGradient id="moc_cream" cx="45%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="60%" stop-color="#F5EDE4"/>
+      <stop offset="100%" stop-color="#E4CBA8"/>
+    </radialGradient>
+    <linearGradient id="moc_drizzle" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6B4226"/>
+      <stop offset="100%" stop-color="#3B2419"/>
+    </linearGradient>
+  </defs>
+
+  <ellipse cx="960" cy="900" rx="330" ry="55" fill="url(#moc_shadow)"/>
+
+  <!-- handle -->
+  <path d="M1150 540 C1260 540 1265 700 1160 715 L1150 668 C1218 656 1215 590 1150 590 Z" fill="url(#moc_handle)" stroke="#2A1810" stroke-width="2"/>
+
+  <!-- mug body -->
+  <path d="M780 480 L1140 480 L1100 830 C1094 862 826 862 820 830 Z" fill="url(#moc_mug_body)" stroke="#2A1810" stroke-width="2"/>
+
+  <!-- whipped cream swirl -->
+  <ellipse cx="960" cy="480" rx="188" ry="46" fill="url(#moc_cream)"/>
+  <ellipse cx="900" cy="450" rx="60" ry="34" fill="url(#moc_cream)"/>
+  <ellipse cx="1010" cy="452" rx="55" ry="32" fill="url(#moc_cream)"/>
+  <ellipse cx="960" cy="425" rx="45" ry="28" fill="#FFFFFF"/>
+
+  <!-- chocolate drizzle -->
+  <path d="M860 440 C880 460 900 430 920 452 C940 472 960 438 980 458 C1000 478 1020 445 1040 462"
+        stroke="url(#moc_drizzle)" stroke-width="7" fill="none" stroke-linecap="round" opacity="0.85"/>
+  <path d="M900 470 C900 490 910 505 905 520" stroke="url(#moc_drizzle)" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.7"/>
+  <path d="M1020 472 C1020 492 1010 507 1015 522" stroke="url(#moc_drizzle)" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.7"/>
+
+  <!-- highlight on mug -->
+  <path d="M818 520 C808 600 812 720 842 800" stroke="#FFFFFF" stroke-width="18" stroke-linecap="round" opacity="0.28" fill="none"/>
+
+  <ellipse cx="960" cy="850" rx="240" ry="16" fill="#3B2419" opacity="0.12"/>
+</svg>

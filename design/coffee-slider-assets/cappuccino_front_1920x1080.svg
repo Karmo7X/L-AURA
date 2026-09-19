@@ -1,0 +1,56 @@
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="cap_shadow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#2A1810" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#2A1810" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="cap_cup_body" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#DCCFBE"/>
+      <stop offset="18%" stop-color="#FBF7F2"/>
+      <stop offset="50%" stop-color="#FFFFFF"/>
+      <stop offset="82%" stop-color="#F1E9DF"/>
+      <stop offset="100%" stop-color="#D2C4B0"/>
+    </linearGradient>
+    <radialGradient id="cap_foam" cx="45%" cy="35%" r="70%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="60%" stop-color="#F4EDE2"/>
+      <stop offset="100%" stop-color="#D8C8AE"/>
+    </radialGradient>
+    <linearGradient id="cap_saucer" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="70%" stop-color="#F1E9DF"/>
+      <stop offset="100%" stop-color="#DED2C2"/>
+    </linearGradient>
+    <linearGradient id="cap_handle" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FBF7F2"/>
+      <stop offset="50%" stop-color="#E3D9CC"/>
+      <stop offset="100%" stop-color="#C9BCA9"/>
+    </linearGradient>
+  </defs>
+
+  <ellipse cx="960" cy="860" rx="340" ry="55" fill="url(#cap_shadow)"/>
+
+  <!-- saucer -->
+  <ellipse cx="960" cy="800" rx="310" ry="48" fill="url(#cap_saucer)" stroke="#D9CCBB" stroke-width="2"/>
+  <ellipse cx="960" cy="794" rx="270" ry="35" fill="#EDE3D5"/>
+
+  <!-- handle -->
+  <path d="M1155 560 C1250 560 1255 695 1165 710 L1155 668 C1212 658 1210 602 1155 602 Z" fill="url(#cap_handle)" stroke="#D9CCBB" stroke-width="2"/>
+
+  <!-- cup body -->
+  <path d="M780 500 L1140 500 L1100 730 C1094 764 946 784 820 764 C800 760 788 746 784 730 Z" fill="url(#cap_cup_body)" stroke="#D9CCBB" stroke-width="2"/>
+
+  <!-- foam top -->
+  <ellipse cx="960" cy="502" rx="182" ry="46" fill="url(#cap_foam)"/>
+  <!-- cocoa dust rings + rosetta -->
+  <path d="M900 480 C935 470 985 470 1020 485" stroke="#8A5A34" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.6"/>
+  <path d="M925 495 C945 488 975 488 995 498" stroke="#6B4226" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.7"/>
+  <circle cx="880" cy="508" r="4" fill="#8A5A34" opacity="0.55"/>
+  <circle cx="1040" cy="500" r="3.5" fill="#8A5A34" opacity="0.5"/>
+  <circle cx="960" cy="470" r="3" fill="#8A5A34" opacity="0.5"/>
+
+  <!-- highlight -->
+  <path d="M820 530 C812 600 816 690 842 730" stroke="#FFFFFF" stroke-width="20" stroke-linecap="round" opacity="0.55" fill="none"/>
+
+  <ellipse cx="960" cy="838" rx="240" ry="16" fill="#3B2419" opacity="0.10"/>
+</svg>

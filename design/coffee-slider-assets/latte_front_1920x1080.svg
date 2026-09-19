@@ -1,0 +1,55 @@
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="lat_shadow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#2A1810" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#2A1810" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="lat_glass" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#CFE3E6" stop-opacity="0.35"/>
+      <stop offset="15%" stop-color="#FFFFFF" stop-opacity="0.75"/>
+      <stop offset="50%" stop-color="#EAF4F5" stop-opacity="0.25"/>
+      <stop offset="85%" stop-color="#FFFFFF" stop-opacity="0.65"/>
+      <stop offset="100%" stop-color="#CFE3E6" stop-opacity="0.35"/>
+    </linearGradient>
+    <linearGradient id="lat_milk" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F5EDE4"/>
+      <stop offset="45%" stop-color="#E4CBA8"/>
+      <stop offset="100%" stop-color="#B77F4D"/>
+    </linearGradient>
+    <linearGradient id="lat_espresso_layer" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#6B4226"/>
+      <stop offset="100%" stop-color="#3B2419"/>
+    </linearGradient>
+    <radialGradient id="lat_foam" cx="45%" cy="35%" r="70%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="70%" stop-color="#F5EDE4"/>
+      <stop offset="100%" stop-color="#E4CBA8"/>
+    </radialGradient>
+  </defs>
+
+  <ellipse cx="960" cy="900" rx="260" ry="50" fill="url(#lat_shadow)"/>
+
+  <!-- glass body -->
+  <path d="M830 300 L1090 300 L1060 850 C1058 875 862 875 860 850 Z" fill="#FFFFFF" opacity="0.12" stroke="#D9E7E8" stroke-width="2"/>
+
+  <!-- liquid layers inside glass -->
+  <clipPath id="lat_clip">
+    <path d="M836 308 L1084 308 L1057 846 C1055 866 865 866 863 846 Z"/>
+  </clipPath>
+  <g clip-path="url(#lat_clip)">
+    <rect x="820" y="640" width="280" height="230" fill="url(#lat_espresso_layer)"/>
+    <rect x="820" y="420" width="280" height="230" fill="url(#lat_milk)"/>
+    <rect x="820" y="308" width="280" height="120" fill="url(#lat_foam)"/>
+    <!-- latte art heart -->
+    <path d="M960 350 C935 320 895 335 900 365 C903 390 940 405 960 425 C980 405 1017 390 1020 365 C1025 335 985 320 960 350 Z" fill="#8A5A34" opacity="0.75"/>
+  </g>
+
+  <!-- glass overlay sheen -->
+  <path d="M830 300 L1090 300 L1060 850 C1058 875 862 875 860 850 Z" fill="url(#lat_glass)"/>
+  <path d="M865 330 C858 480 862 680 880 830" stroke="#FFFFFF" stroke-width="16" stroke-linecap="round" opacity="0.6" fill="none"/>
+
+  <!-- rim highlight -->
+  <ellipse cx="960" cy="302" rx="130" ry="16" fill="#FFFFFF" opacity="0.5"/>
+
+  <ellipse cx="960" cy="870" rx="200" ry="14" fill="#3B2419" opacity="0.10"/>
+</svg>

@@ -1,0 +1,86 @@
+{
+  "width": 1200,
+  "height": 1200,
+  "beans": [
+    {
+      "src": "/hero/hero-bean-1.png",
+      "left": 39.5,
+      "top": 8.25,
+      "width": 5.5,
+      "height": 5.667,
+      "size": 2239
+    },
+    {
+      "src": "/hero/hero-bean-2.png",
+      "left": 50.167,
+      "top": 18.667,
+      "width": 5.167,
+      "height": 5.083,
+      "size": 1925
+    },
+    {
+      "src": "/hero/hero-bean-3.png",
+      "left": 77.417,
+      "top": 75.25,
+      "width": 7.5,
+      "height": 7.333,
+      "size": 1165
+    },
+    {
+      "src": "/hero/hero-bean-4.png",
+      "left": 8.333,
+      "top": 27.333,
+      "width": 4.25,
+      "height": 4.167,
+      "size": 1094
+    },
+    {
+      "src": "/hero/hero-bean-5.png",
+      "left": 40.583,
+      "top": 41.583,
+      "width": 4.25,
+      "height": 3.75,
+      "size": 974
+    },
+    {
+      "src": "/hero/hero-bean-6.png",
+      "left": 43.917,
+      "top": 40.583,
+      "width": 4.083,
+      "height": 3.667,
+      "size": 928
+    },
+    {
+      "src": "/hero/hero-bean-7.png",
+      "left": 20.917,
+      "top": 15.417,
+      "width": 4.417,
+      "height": 3.167,
+      "size": 798
+    },
+    {
+      "src": "/hero/hero-bean-8.png",
+      "left": 48.583,
+      "top": 59.75,
+      "width": 3.583,
+      "height": 3.583,
+      "size": 692
+    },
+    {
+      "src": "/hero/hero-bean-9.png",
+      "left": 46.417,
+      "top": 19.5,
+      "width": 3.833,
+      "height": 3.583,
+      "size": 589
+    },
+    {
+      "src": "/hero/hero-bean-10.png",
+      "left": 64.667,
+      "top": 64.833,
+      "width": 2.583,
+      "height": 3.417,
+      "size": 398
+    }
+  ]
+}
