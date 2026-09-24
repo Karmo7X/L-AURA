@@ -182,6 +182,11 @@ export function Footer() {
                 </a>
               </li>
             ))}
+            <li>
+              <a href="/admin" className="transition-colors hover:text-linen">
+                Cafe admin
+              </a>
+            </li>
           </ul>
         </div>
       </div>

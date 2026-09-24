@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { CupLogo } from "@/components/ui/icons";
 import { getOrder } from "@/lib/supabase/orders";
+import { payLink, qrSvg } from "@/lib/qr";
 import { invoiceNumber, money, orderDate, orderTime, type PlacedOrder } from "@/lib/orders";
 import { PrintButton } from "./PrintButton";
 
@@ -30,13 +31,15 @@ export default async function InvoicePage({ params, searchParams }: PageProps<"/
   if (!order) notFound();
 
   const count = order.items.reduce((n, item) => n + item.qty, 0);
+  const link = await payLink(order.id);
+  const qr = await qrSvg(link);
 
   return (
     <main className="min-h-svh bg-oat px-4 py-8 text-ink sm:px-6 sm:py-12 print:bg-white print:p-0">
       {/* toolbar — screen only */}
       <div className="mx-auto flex max-w-[820px] items-center justify-between gap-4 print:hidden">
         <Link
-          href="/#order"
+          href="/order"
           className="inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-semibold text-espresso-800 transition-colors hover:bg-oat-deep"
         >
           <ArrowLeft className="h-4 w-4" aria-hidden />
@@ -72,7 +75,10 @@ export default async function InvoicePage({ params, searchParams }: PageProps<"/
           <div>
             <dt className="label-caps text-amber-deep">Billed to</dt>
             <dd className="mt-2 font-semibold text-espresso-800">{order.customer_name ?? "Walk-in guest"}</dd>
-            <dd className="text-muted">Order #{order.order_number}</dd>
+            <dd className="text-muted">
+              Order #{order.order_number}
+              {order.table_number ? ` · Table ${order.table_number}` : ""}
+            </dd>
           </div>
           <div>
             <dt className="label-caps text-amber-deep">Issued</dt>
@@ -138,12 +144,39 @@ export default async function InvoicePage({ params, searchParams }: PageProps<"/
           </dl>
         </div>
 
-        <footer className="mt-12 grid gap-6 border-t border-dashed border-espresso-800/20 pt-6 text-[13px] text-muted sm:grid-cols-[1fr_auto] sm:items-end">
+        {/* the code the counter scans to take payment */}
+        <section className="mt-10 flex flex-wrap items-center gap-6 rounded-2xl border border-espresso-800/15 p-5 break-inside-avoid print:border-espresso-800/40">
+          <span className="h-[112px] w-[112px] shrink-0 [&>svg]:h-full [&>svg]:w-full" dangerouslySetInnerHTML={{ __html: qr }} />
+          <div className="min-w-[220px] flex-1">
+            {order.paid_at ? (
+              <>
+                <p className="label-caps text-[#2f6b3a]">Paid</p>
+                <p className="mt-1 font-serif text-xl text-espresso-800">
+                  {money(order.total)} by {order.payment_method === "card" ? "card" : "cash"}
+                </p>
+                <p className="mt-1 text-[13px] text-muted">
+                  {orderDate(order.paid_at)} at {orderTime(order.paid_at)}
+                </p>
+              </>
+            ) : (
+              <>
+                <p className="label-caps text-amber-deep">To pay at the counter</p>
+                <p className="mt-1 font-serif text-xl text-espresso-800">Show this code when you pay</p>
+                <p className="mt-1 text-[13px] text-muted">
+                  Our counter scans it to bring up your order and settle it. Nothing is charged by scanning it yourself.
+                </p>
+              </>
+            )}
+            <p className="mt-2 font-mono text-[11px] break-all text-subtle">{link}</p>
+          </div>
+        </section>
+
+        <footer className="mt-10 grid gap-6 border-t border-dashed border-espresso-800/20 pt-6 text-[13px] text-muted sm:grid-cols-[1fr_auto] sm:items-end">
           <div>
             <p className="font-serif text-lg text-espresso-800 italic">Thank you — see you at the bar.</p>
             <p className="mt-1">
-              Status: <span className="font-semibold text-espresso-800">{STATUS[order.status]}</span> · Payment is taken at
-              the counter.
+              Status: <span className="font-semibold text-espresso-800">{STATUS[order.status]}</span>
+              {order.paid_at ? " · Paid" : " · Payment is taken at the counter."}
             </p>
           </div>
           <p className="font-mono text-[11px] break-all text-subtle sm:text-right">Ref {order.id}</p>

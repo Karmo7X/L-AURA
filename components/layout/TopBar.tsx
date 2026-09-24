@@ -1,16 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import Link from "next/link";
+import { AnimatePresence, motion, useScroll, useSpring } from "motion/react";
 import { Menu, Receipt, X } from "lucide-react";
-import { SHOP_NAV } from "@/lib/shop";
+import { isPageLink, SHOP_NAV } from "@/lib/shop";
 import { useCafe } from "@/lib/store";
 import { cn, EASE_SOFT } from "@/lib/cn";
 import { CupLogo } from "@/components/ui/icons";
 import { getLenis, scrollToHash } from "@/components/providers/SmoothScroll";
 
 /** Sections that sit on espresso-dark backgrounds. */
-const DARK_SECTIONS = ["home", "hours", "roast", "contact"];
+const DARK_SECTIONS = ["home", "day-cadence", "contact"];
 
 export function TopBar() {
   const [scrolled, setScrolled] = useState(false);
@@ -18,6 +19,9 @@ export function TopBar() {
   const [active, setActive] = useState<string>(SHOP_NAV[0].href);
   const [open, setOpen] = useState(false);
   const count = useCafe((s) => s.cart.reduce((n, item) => n + item.qty, 0));
+  // a hairline that fills as you read down the page
+  const { scrollYProgress } = useScroll();
+  const read = useSpring(scrollYProgress, { stiffness: 120, damping: 28, restDelta: 0.001 });
 
   useEffect(() => {
     let frame = 0;
@@ -39,6 +43,7 @@ export function TopBar() {
 
       let current: string = SHOP_NAV[0].href;
       for (const link of SHOP_NAV) {
+        if (isPageLink(link.href)) continue; // that one leaves the page — nothing to spy on
         const el = document.querySelector(link.href);
         if (el && el.getBoundingClientRect().top <= vh * 0.4) current = link.href;
       }
@@ -98,29 +103,34 @@ export function TopBar() {
           </a>
 
           <ul className="hidden items-center gap-9 lg:flex">
-            {SHOP_NAV.map((link) => (
-              <li key={link.href}>
-                <a
-                  href={link.href}
-                  aria-current={active === link.href ? "true" : undefined}
-                  className={cn(
-                    "relative py-2 text-sm font-medium transition-opacity duration-300 after:absolute after:inset-x-0 after:-bottom-0.5 after:h-px after:origin-left after:scale-x-0 after:bg-current after:transition-transform after:duration-500 after:ease-soft hover:opacity-100 hover:after:scale-x-100",
-                    active === link.href ? "opacity-100 after:scale-x-100" : "opacity-70",
+            {SHOP_NAV.map((link) => {
+              const style = cn(
+                "relative py-2 text-sm font-medium transition-opacity duration-300 after:absolute after:inset-x-0 after:-bottom-0.5 after:h-px after:origin-left after:scale-x-0 after:bg-current after:transition-transform after:duration-500 after:ease-soft hover:opacity-100 hover:after:scale-x-100",
+                active === link.href ? "opacity-100 after:scale-x-100" : "opacity-70",
+              );
+              return (
+                <li key={link.href}>
+                  {isPageLink(link.href) ? (
+                    <Link href={link.href} className={style}>
+                      {link.label}
+                    </Link>
+                  ) : (
+                    <a href={link.href} aria-current={active === link.href ? "true" : undefined} className={style}>
+                      {link.label}
+                    </a>
                   )}
-                >
-                  {link.label}
-                </a>
-              </li>
-            ))}
+                </li>
+              );
+            })}
           </ul>
 
           <div className="flex items-center gap-2 sm:gap-3">
             <a
-              href="#order"
+              href="/order"
               className="group relative inline-flex items-center gap-2 rounded-full bg-amber px-4 py-2.5 text-sm font-semibold text-paper shadow-[0_10px_24px_-10px_rgba(176,90,42,0.8)] transition duration-300 ease-soft hover:scale-[1.04] hover:bg-[#9c4d22] active:scale-[0.98] sm:px-5"
             >
               <Receipt className="h-4 w-4" aria-hidden />
-              <span className="hidden sm:inline">Print order</span>
+              <span className="hidden sm:inline">Order now</span>
               <span className="sm:hidden">Order</span>
               <AnimatePresence>
                 {count > 0 && (
@@ -151,6 +161,11 @@ export function TopBar() {
             </button>
           </div>
         </nav>
+        <motion.span
+          aria-hidden
+          style={{ scaleX: read }}
+          className="absolute inset-x-0 bottom-0 h-px origin-left bg-linear-to-r from-terracotta to-peach"
+        />
       </header>
 
       <AnimatePresence>
@@ -181,18 +196,29 @@ export function TopBar() {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.45, ease: EASE_SOFT, delay: 0.1 + i * 0.06 }}
                   >
-                    <a
-                      href={link.href}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setOpen(false);
-                        setTimeout(() => scrollToHash(link.href), 60);
-                      }}
-                      className="flex items-baseline gap-4 border-b border-espresso-800/10 py-4 font-serif text-3xl text-espresso-800 transition-colors hover:text-amber"
-                    >
-                      <span className="label-caps font-sans text-subtle">0{i + 1}</span>
-                      {link.label}
-                    </a>
+                    {isPageLink(link.href) ? (
+                      <Link
+                        href={link.href}
+                        onClick={() => setOpen(false)}
+                        className="flex items-baseline gap-4 border-b border-espresso-800/10 py-4 font-serif text-3xl text-espresso-800 transition-colors hover:text-amber"
+                      >
+                        <span className="label-caps font-sans text-subtle">0{i + 1}</span>
+                        {link.label}
+                      </Link>
+                    ) : (
+                      <a
+                        href={link.href}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setOpen(false);
+                          setTimeout(() => scrollToHash(link.href), 60);
+                        }}
+                        className="flex items-baseline gap-4 border-b border-espresso-800/10 py-4 font-serif text-3xl text-espresso-800 transition-colors hover:text-amber"
+                      >
+                        <span className="label-caps font-sans text-subtle">0{i + 1}</span>
+                        {link.label}
+                      </a>
+                    )}
                   </motion.li>
                 ))}
               </ul>

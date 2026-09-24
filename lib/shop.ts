@@ -1,12 +1,17 @@
 import { IMAGES } from "./data";
 
+/** Hash links scroll the home page; "/order" opens the ordering screen. */
 export const SHOP_NAV = [
   { label: "Home", href: "#home" },
   { label: "Menu", href: "#coffee" },
-  { label: "Hours", href: "#hours" },
-  { label: "Roast", href: "#roast" },
-  { label: "Order", href: "#order" },
+  { label: "The Day", href: "#day-cadence" },
+  { label: "The Space", href: "#sanctuary" },
+  { label: "The Bar", href: "#barista-table" },
+  { label: "Order", href: "/order" },
 ] as const;
+
+/** Links that go to a page of their own rather than down the home page. */
+export const isPageLink = (href: string) => !href.startsWith("#");
 
 export interface Product {
   id: string;

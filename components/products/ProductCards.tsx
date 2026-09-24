@@ -4,14 +4,16 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
 import { Plus } from "lucide-react";
-import { PRODUCTS, type Product } from "@/lib/shop";
+import { categoryLabel, STARTER_CATEGORIES, type Category, type MenuProduct } from "@/lib/products";
+import { CupLogo } from "@/components/ui/icons";
 import { formatPrice, useCafe } from "@/lib/store";
 import { EASE_SOFT } from "@/lib/cn";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import type { MenuContent } from "@/lib/content";
 
 const MAX_LEAN = 13; // degrees
 
-function ProductCard({ product, index }: { product: Product; index: number }) {
+function ProductCard({ product, index, categories }: { product: MenuProduct; index: number; categories: Category[] }) {
   const card = useRef<HTMLDivElement>(null);
   const addToCart = useCafe((s) => s.addToCart);
   const showToast = useCafe((s) => s.showToast);
@@ -22,12 +24,27 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
   const near = useMotionValue(0);
 
   const springs = { stiffness: 150, damping: 18, mass: 0.6 };
-  const leanY = useSpring(useTransform(towardX, (v) => v * MAX_LEAN), springs);
-  const leanX = useSpring(useTransform(towardY, (v) => -v * MAX_LEAN), springs);
-  const lift = useSpring(useTransform(near, (v) => v * -14), springs);
+  const leanY = useSpring(
+    useTransform(towardX, (v) => v * MAX_LEAN),
+    springs,
+  );
+  const leanX = useSpring(
+    useTransform(towardY, (v) => -v * MAX_LEAN),
+    springs,
+  );
+  const lift = useSpring(
+    useTransform(near, (v) => v * -14),
+    springs,
+  );
   const glare = useSpring(near, springs);
-  const glareX = useSpring(useTransform(towardX, (v) => 50 + v * 46), springs);
-  const glareY = useSpring(useTransform(towardY, (v) => 50 + v * 46), springs);
+  const glareX = useSpring(
+    useTransform(towardX, (v) => 50 + v * 46),
+    springs,
+  );
+  const glareY = useSpring(
+    useTransform(towardY, (v) => 50 + v * 46),
+    springs,
+  );
   const shine = useTransform(
     [glareX, glareY, glare],
     ([x, y, strength]: number[]) =>
@@ -80,17 +97,29 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
         style={{ rotateX: leanX, rotateY: leanY, y: lift, transformStyle: "preserve-3d" }}
         className="group relative flex h-full flex-col rounded-2xl border border-espresso-800/[0.07] bg-paper p-4 shadow-card transition-shadow duration-500 hover:shadow-card-hover sm:p-5"
       >
-        <div className="relative aspect-4/5 overflow-hidden rounded-xl bg-oat">
-          <Image
-            src={product.image}
-            alt={product.name}
-            fill
-            sizes="(min-width: 1024px) 300px, (min-width: 640px) 45vw, 88vw"
-            className="object-cover transition-transform duration-700 ease-soft group-hover:scale-[1.06]"
-          />
+        <div className="relative aspect-square overflow-hidden rounded-xl bg-oat">
+          {product.image ? (
+            <Image
+              src={product.image}
+              alt={product.name}
+              fill
+              sizes="(min-width: 1024px) 300px, (min-width: 640px) 45vw, 88vw"
+              className="object-cover transition-transform duration-700 ease-soft group-hover:scale-[1.06]"
+            />
+          ) : (
+            // no photo yet: a warm plate in the product's own colour
+            <div
+              className="absolute inset-0 grid place-items-center"
+              style={{
+                background: `radial-gradient(80% 70% at 50% 40%, ${product.accent}33, ${product.accent}10 60%, transparent)`,
+              }}
+            >
+              <CupLogo className="h-20 w-20 opacity-70" style={{ color: product.accent }} />
+            </div>
+          )}
           <motion.span aria-hidden style={{ background: shine }} className="pointer-events-none absolute inset-0" />
           <span className="label-caps absolute top-3 left-3 rounded-full bg-espresso-900/75 px-2.5 py-1 text-[10px] text-paper backdrop-blur-sm">
-            {product.origin}
+            {product.origin || categoryLabel(product.category, categories)}
           </span>
         </div>
 
@@ -104,7 +133,12 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
             <button
               type="button"
               onClick={() => {
-                addToCart({ key: product.id, name: product.name, price: product.price, image: product.image });
+                addToCart({
+                  key: product.id,
+                  name: product.name,
+                  price: product.price,
+                  image: product.image ?? undefined,
+                });
                 showToast(`${product.name} added — check the printer`);
               }}
               aria-label={`Add ${product.name} to your order`}
@@ -119,21 +153,40 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
   );
 }
 
-export function ProductCards() {
+const COUNT_WORDS = ["No", "One", "Two", "Three", "Four"];
+
+/** The featured products — the cafe picks which ones in /admin/products. */
+export function ProductCards({
+  products,
+  content,
+  categories = STARTER_CATEGORIES,
+}: {
+  products: MenuProduct[];
+  content: MenuContent;
+  categories?: Category[];
+}) {
+  // the cafe can write their own heading; left empty we count the cards
+  const title =
+    content.title ||
+    `${COUNT_WORDS[products.length] ?? products.length} way${products.length === 1 ? "" : "s"} to drink it`;
+
   return (
-    <section id="coffee" aria-labelledby="coffee-title" className="relative overflow-hidden bg-parchment py-24 lg:py-32">
-      <div aria-hidden className="bean-pattern pointer-events-none absolute inset-0 opacity-[0.06]" />
+    <section
+      id="coffee"
+      aria-labelledby="coffee-title"
+      className="linen-pattern relative overflow-hidden border-y border-espresso-800/8 py-24 lg:py-32"
+    >
       <div className="container-page relative">
         <SectionHeading
           id="coffee-title"
-          eyebrow="On the bar today"
-          title="Four ways to drink it"
+          eyebrow={content.eyebrow}
+          title={title}
           divider
-          description="Everything is pulled to order. Reach toward a card and it will lean your way."
+          description={content.description}
         />
         <ul className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-7">
-          {PRODUCTS.map((product, i) => (
-            <ProductCard key={product.id} product={product} index={i} />
+          {products.map((product, i) => (
+            <ProductCard key={product.id} product={product} index={i} categories={categories} />
           ))}
         </ul>
       </div>

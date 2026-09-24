@@ -3,14 +3,35 @@ export interface PlacedOrder {
   id: string;
   order_number: number;
   customer_name: string | null;
-  status: "placed" | "preparing" | "ready" | "collected" | "cancelled";
+  /** Which table it was ordered from, if any. */
+  table_number: string | null;
+  note: string | null;
+  status: OrderStatus;
   subtotal: number;
   tax: number;
   tax_rate: number;
   total: number;
   created_at: string;
+  /** When the counter took the money, and how. */
+  paid_at: string | null;
+  payment_method: PaymentMethod | null;
+  /** When the guest asked to settle, if they did. */
+  payment_requested_at?: string | null;
   items: PlacedOrderItem[];
 }
+
+export type PaymentMethod = "cash" | "card";
+
+export type OrderStatus = "placed" | "preparing" | "ready" | "collected" | "cancelled";
+
+/** What each status means to a guest and to the counter. */
+export const ORDER_STATUS: Record<OrderStatus, { label: string; guest: string }> = {
+  placed: { label: "New", guest: "Sent to the bar" },
+  preparing: { label: "Preparing", guest: "Being made now" },
+  ready: { label: "Ready", guest: "Ready at the counter" },
+  collected: { label: "Collected", guest: "Collected — enjoy" },
+  cancelled: { label: "Cancelled", guest: "Cancelled" },
+};
 
 export interface PlacedOrderItem {
   item_id: string;
@@ -23,7 +44,13 @@ export interface PlacedOrderItem {
 export interface OrderRequest {
   items: { id: string; qty: number }[];
   customerName?: string;
+  /** The table the guest is sitting at, from /order?table=5. */
+  table?: string;
+  note?: string;
 }
+
+/** Table numbers come from a QR link, so keep them short and plain. */
+export const TABLE_NUMBER = /^[A-Za-z0-9 -]{1,8}$/;
 
 export type PlaceOrderResult = { ok: true; order: PlacedOrder } | { ok: false; error: string };
 

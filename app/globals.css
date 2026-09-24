@@ -30,6 +30,11 @@
   --color-peach: #fe997a;
   --color-gold: #d9a566;
 
+  /* the cinematic room the hero and the day-cadence section sit in */
+  --color-forest: #152416;
+  --color-forest-deep: #0f160e;
+  --color-sage: #8fbf94;
+
   --font-serif: var(--font-playfair), "Georgia", serif;
   --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
 
@@ -113,6 +118,47 @@
       box-shadow: 0 0 0 14px rgb(254 153 122 / 0);
     }
   }
+
+  /* a record turning on the roastery's deck */
+  --animate-spin-slow: spin-slow 9s linear infinite;
+  @keyframes spin-slow {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* the ceiling beam breathing over the hero */
+  --animate-beam: beam 9s var(--ease-soft) infinite;
+  @keyframes beam {
+    0%,
+    100% {
+      opacity: 0.55;
+      transform: scaleX(1);
+    }
+    50% {
+      opacity: 0.9;
+      transform: scaleX(1.08);
+    }
+  }
+
+  /* dust drifting through that beam */
+  --animate-mote: mote 11s linear infinite;
+  @keyframes mote {
+    0% {
+      transform: translate3d(0, 0, 0);
+      opacity: 0;
+    }
+    12% {
+      opacity: 0.8;
+    }
+    88% {
+      opacity: 0.5;
+    }
+    100% {
+      transform: translate3d(22px, -220px, 0);
+      opacity: 0;
+    }
+  }
 }
 
 /* ------------------------------------------------------------------ */
@@ -146,6 +192,19 @@
 @utility bean-pattern {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%232b1a12' stroke-width='1.2' opacity='.5'%3E%3Cg transform='rotate(-28 30 34)'%3E%3Cellipse cx='30' cy='34' rx='9' ry='13'/%3E%3Cpath d='M30 22c-4 7 4 17 0 24'/%3E%3C/g%3E%3Cg transform='rotate(34 88 86)'%3E%3Cellipse cx='88' cy='86' rx='8' ry='11.5'/%3E%3Cpath d='M88 75.5c-3.5 6 3.5 15 0 21'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   background-size: 120px 120px;
+}
+
+/* unbleached paper: the canvas every daylight section sits on */
+@utility linen-pattern {
+  background-color: var(--color-paper);
+  background-image: radial-gradient(rgb(140 109 88 / 0.13) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+/* the overhead light the hero drink stands in */
+@utility light-beam {
+  background: linear-gradient(180deg, rgb(235 255 230 / 0.16) 0%, rgb(200 240 190 / 0.05) 62%, transparent 100%);
+  clip-path: polygon(42% 0%, 58% 0%, 86% 100%, 14% 100%);
 }
 
 @utility wood-grain {
@@ -197,6 +256,37 @@ html.lenis body {
 }
 .lenis [data-lenis-prevent] {
   overscroll-behavior: contain;
+}
+
+/* The loading screen ships with the page's HTML so it covers the first paint.
+   Anyone who has already seen it (see the script in app/layout.tsx) never
+   sees it again, and if the page's JavaScript never arrives it gets out of
+   the way by itself. */
+html[data-intro="seen"] #intro-root {
+  display: none;
+}
+#intro-root {
+  animation: intro-failsafe 0s 12s forwards;
+}
+@keyframes intro-failsafe {
+  to {
+    visibility: hidden;
+  }
+}
+
+/* A slip rolling out of the bar terminal. It's a plain CSS animation so the
+   slip is in the page the moment the order changes — even on a phone whose
+   screen is off, where JavaScript-driven frames are paused. */
+.slip-feed {
+  animation: slip-feed 1.8s cubic-bezier(0.16, 0.9, 0.24, 1) both;
+}
+@keyframes slip-feed {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
 }
 
 /* Printed invoices: A4 with even margins, true colours for the accents */
